@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Ruang untuk navbar sticky saat lompat ke anchor. */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight text-brand-dark;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.brand.dark');
+    outline-offset: 3px;
+  }
+
+  /* Fokus terlihat pada latar gelap. */
+  .on-dark :focus-visible {
+    outline-color: #ffffff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .section-pad {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold transition duration-200 sm:text-base;
+  }
+
+  .btn-primary {
+    @apply bg-brand-dark text-white shadow-sm hover:bg-brand-deeper hover:shadow-md active:translate-y-px;
+  }
+
+  .btn-secondary {
+    @apply border border-brand/40 bg-white text-brand-dark hover:border-brand hover:bg-brand-pale;
+  }
+
+  .btn-light {
+    @apply bg-white text-brand-dark shadow-sm hover:bg-brand-pale active:translate-y-px;
+  }
+
+  .card {
+    @apply rounded-3xl border border-brand-soft/70 bg-white shadow-card transition duration-200;
+  }
+}
