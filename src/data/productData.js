@@ -1,224 +1,388 @@
 /**
- * SATU-SATUNYA FILE YANG PERLU ANDA EDIT UNTUK MENGISI KONTEN.
+ * SEMUA KONTEN WEBSITE ADA DI FILE INI.
  *
- * Semua teks dalam tanda kurung siku, mis. "[NAMA PRODUK]", adalah PLACEHOLDER.
- * Ganti dengan konten asli Anda. Komponen di folder `components/` tidak perlu diubah.
+ * Isi fitur diambil dari file template (versi 1.0, November 2026):
+ * "Teman Wedding Lite.xlsx", "Teman Wedding Premium.xlsx",
+ * "Teman Lamaran.xlsx", dan "Deeptalk Couples.xlsx".
  *
- * Link tujuan (CTA / sosial media) baru dianggap aktif jika diawali
- * "https://", "http://", "mailto:", "tel:", atau "#". Selama masih berupa
- * placeholder, tombol tidak akan membuka URL apa pun dan menampilkan
- * pemberitahuan "link belum dikonfigurasi".
+ * File ini juga dibaca oleh vite.config.js untuk membuat meta SEO,
+ * Open Graph, dan structured data (JSON-LD) saat build.
  */
-import {
-  Box,
-  Layers,
-  Puzzle,
-  Settings2,
-  Sparkles,
-  Star,
-} from 'lucide-react'
 
 /* ------------------------------------------------------------------ */
-/* Identitas produk                                                    */
+/* Promo                                                               */
 /* ------------------------------------------------------------------ */
-export const product = {
-  name: '[NAMA PRODUK]',
-  category: '[KATEGORI PRODUK]', // teks kecil (eyebrow) di Hero
-  tagline: '[TAGLINE PRODUK]', // headline utama di Hero
-  shortDescription: '[DESKRIPSI SINGKAT PRODUK]', // paragraf di Hero & Footer
-  description:
-    '[DESKRIPSI PRODUK: jelaskan apa produk ini dan untuk apa produk ini digunakan.]',
-  // Opsional: isi dengan path gambar (mis. import dari src/assets) untuk mengganti
-  // mockup bawaan di Hero. Biarkan null untuk memakai mockup netral.
-  heroImage: null,
-  heroImageAlt: '[DESKRIPSI GAMBAR PRODUK]',
+export const promo = {
+  active: true, // saklar utama: false = semua harga kembali normal
+  label: 'Promo launching',
+  // Hari terakhir promo (WIB), format 'YYYY-MM-DD'. Setelah tanggal ini harga
+  // otomatis kembali normal. null = promo aktif tanpa batas tanggal.
+  endsAt: '2026-12-31',
 }
 
+export const isPromoActive = (now = new Date()) => {
+  if (!promo.active) return false
+  if (!promo.endsAt) return true
+  return now <= new Date(`${promo.endsAt}T23:59:59+07:00`)
+}
+
+export const promoEndLabel = (short = false) =>
+  promo.endsAt
+    ? new Date(`${promo.endsAt}T12:00:00+07:00`).toLocaleDateString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        day: 'numeric',
+        month: short ? 'short' : 'long',
+        ...(!short && { year: 'numeric' }),
+      })
+    : null
+
+export const formatRupiah = (n) => `Rp${n.toLocaleString('id-ID')}`
+
+/** Harga yang berlaku saat ini (promo bila aktif). */
+export const currentPrice = (plan) =>
+  isPromoActive() && plan.promoPrice ? plan.promoPrice : plan.price
+
 /* ------------------------------------------------------------------ */
-/* Navigasi (href harus cocok dengan id section di App.jsx)            */
+/* Identitas & kontak                                                  */
+/* ------------------------------------------------------------------ */
+export const product = {
+  name: 'Teman Wedding',
+  hashtag: '#TemanDalamSetiapPersiapan',
+  category: 'Planner persiapan pernikahan',
+  platform: 'Google Sheets',
+  version: '1.0',
+  intro:
+    'Planner pernikahan di Google Sheets, dari lamaran sampai hari H. Anggaran, vendor, seserahan, tamu, dan berkas nikah tercatat di satu tempat yang saling terhubung. Anda cukup mengisi data, rumus dan dashboard mengurus sisanya.',
+}
+
+const WHATSAPP_NUMBER = '6287869882030' // 0878-6988-2030
+
+/** Link WhatsApp dengan pesan pembuka yang sudah terisi. */
+export const whatsapp = (message) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+
+export const contact = [
+  {
+    label: 'Instagram',
+    value: '@temanwedding.co',
+    href: 'https://instagram.com/temanwedding.co',
+  },
+  {
+    label: 'WhatsApp',
+    value: '0878-6988-2030',
+    href: whatsapp('Halo Teman Wedding, saya mau bertanya.'),
+  },
+  {
+    label: 'Email',
+    value: 'teman.wedding.persiapan@gmail.com',
+    href: 'mailto:teman.wedding.persiapan@gmail.com',
+  },
+]
+
+/* ------------------------------------------------------------------ */
+/* Navigasi (href harus cocok dengan id section)                       */
 /* ------------------------------------------------------------------ */
 export const navLinks = [
-  { label: 'Beranda', href: '#beranda' },
-  { label: 'Fitur', href: '#fitur' },
-  { label: 'Paket', href: '#paket' },
-  { label: 'Add-on', href: '#addon' },
+  { label: 'Isi file', href: '#isi' },
+  { label: 'Berkas nikah', href: '#berkas' },
+  { label: 'Bonus file', href: '#bonus' },
+  { label: 'Harga', href: '#harga' },
   { label: 'FAQ', href: '#faq' },
 ]
 
 /* ------------------------------------------------------------------ */
-/* Link tujuan CTA                                                     */
+/* Contoh data di hero (diambil dari data contoh di dalam template)     */
 /* ------------------------------------------------------------------ */
-export const ctaLinks = {
-  basic: '[LINK PEMESANAN BASIC]',
-  premium: '[LINK PEMESANAN PREMIUM]',
-  addon: '[LINK PEMESANAN ADD-ON]',
-}
-
-/* ------------------------------------------------------------------ */
-/* Product Overview                                                    */
-/* ------------------------------------------------------------------ */
-export const overview = {
-  heading: `Mengenal ${product.name}`,
-  benefits: [
-    {
-      title: '[MANFAAT 1]',
-      description: '[DESKRIPSI MANFAAT 1]',
-      icon: Sparkles,
-    },
-    {
-      title: '[MANFAAT 2]',
-      description: '[DESKRIPSI MANFAAT 2]',
-      icon: Layers,
-    },
-    {
-      title: '[MANFAAT 3]',
-      description: '[DESKRIPSI MANFAAT 3]',
-      icon: Star,
-    },
+export const sample = {
+  couple: ['Raka', 'Nadia'],
+  date: '18 September 2027',
+  city: 'Bandung',
+  countdown: 303,
+  rows: [
+    { label: 'Linimasa', value: '1 dari 2 kegiatan selesai' },
+    { label: 'Anggaran terpakai', value: '17%' },
+    { label: 'Undangan terkirim', value: '1 dari 2' },
   ],
 }
 
 /* ------------------------------------------------------------------ */
-/* Fitur                                                               */
-/* Tambah / hapus item sesuka Anda; grid menyesuaikan otomatis.        */
+/* File pendamping (dibundel di dalam paket)                           */
 /* ------------------------------------------------------------------ */
-export const features = [
-  { title: '[FITUR 1]', description: '[DESKRIPSI FITUR 1]', icon: Box },
-  { title: '[FITUR 2]', description: '[DESKRIPSI FITUR 2]', icon: Layers },
-  { title: '[FITUR 3]', description: '[DESKRIPSI FITUR 3]', icon: Puzzle },
-  { title: '[FITUR 4]', description: '[DESKRIPSI FITUR 4]', icon: Sparkles },
-  { title: '[FITUR 5]', description: '[DESKRIPSI FITUR 5]', icon: Settings2 },
-  { title: '[FITUR 6]', description: '[DESKRIPSI FITUR 6]', icon: Star },
+export const companions = {
+  lamaran: {
+    name: 'Teman Lamaran',
+    tagline: 'Planner persiapan lamaran',
+    description:
+      'Sebelum hari H pernikahan, ada hari lamaran. Info acara, anggaran, dan daftar tugasnya tercatat rapi, dan prioritas tiap tugas dihitung otomatis dari tenggatnya.',
+    sheets: ['Info Lamaran', 'Anggaran Lamaran', 'Task List Lamaran'],
+  },
+  deeptalk: {
+    name: 'Deep Talk Couples',
+    tagline: '100 pertanyaan sebelum menikah',
+    description:
+      'Dijawab sendiri-sendiri, dibahas berdua. Jawaban baru terbuka setelah kalian berdua menjawab pertanyaan yang sama.',
+    topics: 17,
+    questions: 100,
+    sampleQuestion:
+      'Saat sedang sedih atau stres, apa yang kamu butuhkan dariku: didengarkan, diberi solusi, atau diberi ruang?',
+    sampleCategory: 'Komunikasi',
+  },
+}
+
+/* ------------------------------------------------------------------ */
+/* Daftar isi planner pernikahan                                       */
+/* essensial / complete: true, false, atau teks pendek.                */
+/* ------------------------------------------------------------------ */
+export const sheets = [
+  {
+    name: 'Dashboard',
+    description:
+      'Ringkasan yang terisi sendiri: hitung mundur hari H, progres linimasa, anggaran terpakai, dan total tamu. Versi Complete menambah progres berkas, tabungan, 8 grafik, dan panel pengingat tenggat.',
+    essensial: 'Ringkas',
+    complete: 'Lengkap',
+  },
+  {
+    name: 'Master Data',
+    description:
+      'Nama CPP & CPW, tanggal, dan kota cukup diisi sekali; judul di semua sheet ikut berubah. Kategori di sini menjadi pilihan dropdown di sheet lain.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Vendor Comparison',
+    description:
+      'Bandingkan harga, paket, kelebihan, dan kekurangan beberapa vendor dalam kategori yang sama sebelum memesan.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Daftar Vendor',
+    description:
+      'Kontak vendor, estimasi biaya, serta DP, termin 1 dan 2, dan pelunasan. Biaya aktual terjumlah otomatis.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Rencana Anggaran',
+    description:
+      'Batas anggaran, realisasi, sisa tagihan, status pembayaran, dan jatuh tempo untuk setiap kategori.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Daftar Seserahan',
+    description:
+      'Estimasi dan harga aktual tiap barang, tenggat beli, dan link toko. Totalnya masuk ke Rencana Anggaran.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Tabungan',
+    description:
+      'Catat setoran dari tiap sumber dana. Target nabung per bulan dihitung dari sisa waktu menuju hari H.',
+    essensial: false,
+    complete: true,
+  },
+  {
+    name: 'Linimasa Pernikahan',
+    description:
+      'Kegiatan, penanggung jawab, dan tenggat. Sisa waktu dan prioritas terisi otomatis.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'Alur Pendaftaran',
+    description: 'Peta lengkap berkas nikah, dari RT/RW sampai KUA.',
+    essensial: false,
+    complete: true,
+  },
+  {
+    name: 'Daftar Tamu',
+    description:
+      'Tamu per pihak, pax akad, VIP, dan reguler, jenis undangan, serta status pengiriman undangan.',
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: 'List Lagu',
+    description:
+      '50 referensi lagu pernikahan per momen acara, siap dikurasi menjadi wajib putar atau cadangan.',
+    essensial: true,
+    complete: true,
+  },
+]
+
+/** Baris file pendamping di tabel daftar isi. */
+export const companionRows = [
+  {
+    name: companions.lamaran.name,
+    description: companions.lamaran.tagline,
+    essensial: true,
+    complete: true,
+  },
+  {
+    name: companions.deeptalk.name,
+    description: companions.deeptalk.tagline,
+    essensial: '+Rp15rb',
+    complete: true,
+  },
 ]
 
 /* ------------------------------------------------------------------ */
-/* Paket & Add-on                                                      */
-/*                                                                     */
-/* - type: 'main' (paket utama) atau 'addon' (opsional).               */
-/* - highlight: true memberi penekanan visual (tanpa klaim apa pun).   */
-/* - badge: teks label kecil di kartu; kosongkan ('') jika tidak perlu.*/
-/* - id 'addon' dipakai sebagai target anchor navbar "Add-on".         */
+/* Sorotan Complete: Alur Pendaftaran (sengaja hanya teaser)            */
 /* ------------------------------------------------------------------ */
-export const pricing = {
-  heading: 'Pilih paket yang sesuai kebutuhan Anda',
-  description:
-    'Bandingkan paket Basic dan Premium, lalu tambahkan Add-on bila diperlukan.',
-  // Aturan pembelian Add-on belum ditentukan; isi catatan ini jika sudah ada.
-  note: '[CATATAN HARGA / ATURAN PEMBELIAN ADD-ON]',
-  plans: [
-    {
-      id: 'basic',
-      type: 'main',
-      name: 'Basic',
-      description: '[DESKRIPSI PAKET BASIC]',
-      price: '[HARGA BASIC]',
-      priceNote: '', // mis. "per bulan" / "sekali bayar" (isi jika sudah pasti)
-      badge: '',
-      highlight: false,
-      features: [
-        '[FITUR BASIC 1]',
-        '[FITUR BASIC 2]',
-        '[FITUR BASIC 3]',
-        '[FITUR BASIC 4]',
-      ],
-      cta: { label: 'Pilih Basic', href: ctaLinks.basic },
-    },
-    {
-      id: 'premium',
-      type: 'main',
-      name: 'Premium',
-      description: '[DESKRIPSI PAKET PREMIUM]',
-      price: '[HARGA PREMIUM]',
-      priceNote: '',
-      badge: 'Lebih lengkap',
-      highlight: true,
-      features: [
-        '[FITUR PREMIUM 1]',
-        '[FITUR PREMIUM 2]',
-        '[FITUR PREMIUM 3]',
-        '[FITUR PREMIUM 4]',
-        '[FITUR PREMIUM 5]',
-      ],
-      cta: { label: 'Pilih Premium', href: ctaLinks.premium },
-    },
-    {
-      id: 'addon',
-      type: 'addon',
-      name: 'Add-on',
-      description: '[DESKRIPSI ADD-ON]',
-      price: '[HARGA ADD-ON]',
-      priceNote: '',
-      badge: 'Opsional',
-      highlight: false,
-      features: ['[ADD-ON 1]', '[ADD-ON 2]', '[ADD-ON 3]'],
-      cta: { label: 'Lihat Add-on', href: ctaLinks.addon },
-    },
-  ],
+export const registration = {
+  total: 28,
+  stages: ['Dokumen pribadi', 'RT / RW', 'Puskesmas', 'Kelurahan / Desa', 'Kecamatan', 'KUA'],
 }
 
 /* ------------------------------------------------------------------ */
-/* Cara kerja (tepat 3 langkah dianjurkan untuk tampilan terbaik)      */
+/* Cara pakai (dari README template)                                   */
 /* ------------------------------------------------------------------ */
-export const howItWorks = {
-  heading: 'Cara memulai',
-  description: '[DESKRIPSI SINGKAT ALUR PEMESANAN]',
-  steps: [
-    {
-      title: 'Pilih Paket',
-      description: '[DESKRIPSI LANGKAH PERTAMA]',
-    },
-    {
-      title: '[LANGKAH KEDUA]',
-      description: '[DESKRIPSI LANGKAH KEDUA]',
-    },
-    {
-      title: '[LANGKAH KETIGA]',
-      description: '[DESKRIPSI LANGKAH KETIGA]',
-    },
-  ],
-}
+export const steps = [
+  {
+    title: 'Buat salinan pribadi',
+    description:
+      'Buka link yang Anda terima setelah pembelian, lalu klik File → Make a copy. File asli bersifat view only; semua pengisian dilakukan di salinan Anda.',
+  },
+  {
+    title: 'Isi Master Data',
+    description:
+      'Nama CPP dan CPW, tanggal menikah, dan kota. Judul di setiap sheet ikut berubah, dan kategori di sini menjadi pilihan dropdown di sheet lain.',
+  },
+  {
+    title: 'Isi sel krem, biarkan sel hijau',
+    description:
+      'Sel krem diisi oleh Anda. Sel hijau berisi rumus dan terkunci. Dashboard menyusun ringkasannya sendiri.',
+  },
+]
 
 /* ------------------------------------------------------------------ */
-/* FAQ                                                                 */
+/* Paket                                                               */
+/* checkoutUrl: isi link toko (Lynk.id, Shopee, dll). Kosong = WhatsApp. */
 /* ------------------------------------------------------------------ */
-export const faq = {
-  heading: 'Pertanyaan yang sering diajukan',
-  items: [
+export const plans = [
+  {
+    id: 'essensial',
+    name: 'Essensial Wedding Planner',
+    shortName: 'Essensial',
+    price: 59000,
+    promoPrice: 39000,
+    summary: 'Catatan inti persiapan nikah, ditambah planner lamaran.',
+    features: [
+      'Dashboard ringkas: hitung mundur, progres linimasa, anggaran, total tamu',
+      'Master Data, Vendor Comparison, dan Daftar Vendor',
+      'Rencana Anggaran dan Daftar Seserahan',
+      'Linimasa Pernikahan, Daftar Tamu, dan List Lagu',
+    ],
+    bundled: [companions.lamaran.name],
+    upgrade: { name: companions.deeptalk.name, price: 15000 },
+    checkoutUrl: '',
+  },
+  {
+    id: 'complete',
+    name: 'Complete Wedding Planner',
+    shortName: 'Complete',
+    price: 139000,
+    promoPrice: 74000,
+    badge: 'Paling lengkap',
+    summary: 'Seluruh isi Essensial, ditambah dana, berkas nikah, dan deep talk.',
+    features: [
+      'Semua isi planner Essensial',
+      'Tabungan dengan target nabung per bulan otomatis',
+      'Alur Pendaftaran berkas nikah, RT/RW sampai KUA',
+      'Dashboard lengkap: 6 angka ringkasan, 8 grafik, pengingat tenggat',
+    ],
+    bundled: [companions.lamaran.name, companions.deeptalk.name],
+    checkoutUrl: '',
+  },
+]
+
+/** Link pemesanan sebuah paket (checkout bila ada, selain itu WhatsApp). */
+export const orderLink = (plan, withUpgrade = false) => {
+  if (plan.checkoutUrl && !withUpgrade) return plan.checkoutUrl
+  const total = currentPrice(plan) + (withUpgrade ? plan.upgrade.price : 0)
+  const extra = withUpgrade ? ` + ${plan.upgrade.name}` : ''
+  return whatsapp(
+    `Halo Teman Wedding, saya mau pesan ${plan.name}${extra} (${formatRupiah(total)}).`,
+  )
+}
+
+export const included = [
+  'Google Sheets',
+  'Data contoh di tiap sheet',
+  'Dropdown & kalender pop-up',
+  'Sel rumus terkunci',
+  'Lisensi untuk satu pasangan',
+]
+
+/* ------------------------------------------------------------------ */
+/* FAQ (jawaban diambil dari README & lisensi template)                 */
+/* ------------------------------------------------------------------ */
+export const getFaq = () => {
+  const [essensial, complete] = plans
+  const items = [
     {
-      question: 'Apa perbedaan Basic dan Premium?',
-      answer: '[JAWABAN: jelaskan perbedaan paket Basic dan Premium.]',
+      question: 'Apa bedanya Essensial dan Complete?',
+      answer: `${essensial.name} berisi planner pernikahan dengan dashboard ringkas dan 8 sheet kerja, ditambah Teman Lamaran. ${complete.name} berisi semuanya, ditambah sheet Tabungan, Alur Pendaftaran berkas nikah, dashboard lengkap dengan grafik dan pengingat tenggat, serta Deep Talk Couples.`,
     },
     {
-      question: 'Apa itu Add-on?',
+      question: 'Apa itu Teman Lamaran dan Deep Talk Couples?',
       answer:
-        '[JAWABAN: jelaskan apa itu Add-on dan aturan pembeliannya, mis. apakah dibeli terpisah atau bersama paket utama.]',
+        'Teman Lamaran adalah planner untuk acara lamaran: info acara, anggaran, dan daftar tugas. Deep Talk Couples berisi 100 pertanyaan sebelum menikah dalam 17 topik, dijawab terpisah oleh masing-masing calon, lalu dibahas berdua.',
     },
     {
-      question: 'Bagaimana cara melakukan pemesanan?',
-      answer: '[JAWABAN: jelaskan langkah pemesanan.]',
+      question: 'Bisakah Essensial ditambah Deep Talk Couples saja?',
+      answer: `Bisa. Tambah ${formatRupiah(essensial.upgrade.price)} saat memesan ${essensial.name}.`,
+    },
+  ]
+
+  if (isPromoActive()) {
+    const end = promoEndLabel()
+    items.push({
+      question: 'Sampai kapan harga promo berlaku?',
+      answer: `${end ? `Harga promo launching berlaku sampai ${end}.` : 'Harga promo launching berlaku untuk waktu terbatas.'} Setelah itu harga kembali normal: ${essensial.shortName} ${formatRupiah(essensial.price)} dan ${complete.shortName} ${formatRupiah(complete.price)}.`,
+    })
+  }
+
+  return items.concat([
+    {
+      question: 'Bagaimana saya menerima file-nya?',
+      answer:
+        'Setelah pembelian, Anda menerima link ke file Google Sheets yang bersifat view only. Buat salinan pribadi lewat File → Make a copy, lalu isi data di salinan tersebut.',
     },
     {
-      question: 'Bagaimana produk akan diterima setelah pembelian?',
-      answer: '[JAWABAN: jelaskan proses penerimaan produk setelah pembelian.]',
+      question: 'Apakah bisa dibuka di Microsoft Excel?',
+      answer:
+        'Template ini dirancang khusus untuk Google Sheets. Di Excel, beberapa fitur tidak berjalan dengan baik, antara lain kalender pop-up pada kolom tanggal, grafik mini di Dashboard, proteksi sel rumus, dan sebagian format tampilan.',
     },
-  ],
+    {
+      question: 'Bisa diisi lewat HP?',
+      answer:
+        'Untuk mengisi data, gunakan laptop, PC, atau tablet agar tabel, dropdown, dan kalender nyaman dipakai. Aplikasi Google Sheets di HP tetap bisa dipakai untuk memantau progres.',
+    },
+    {
+      question: 'Boleh dibagikan ke pasangan, keluarga, atau WO?',
+      answer:
+        'Boleh. Anda dapat membagikan akses salinan Anda kepada pasangan, keluarga, atau wedding organizer yang membantu persiapan. Lisensinya untuk satu pasangan, dan template tidak boleh dijual kembali atau dibagikan sebagai template.',
+    },
+    {
+      question: 'Apakah sudah ada contoh pengisian?',
+      answer:
+        'Ya. Setiap sheet berisi beberapa baris data contoh agar cara pengisiannya mudah dipahami. Timpa dengan data Anda, atau hapus bila tidak diperlukan.',
+    },
+  ])
 }
 
 /* ------------------------------------------------------------------ */
-/* CTA penutup                                                         */
+/* SEO (dipakai vite.config.js saat build)                             */
 /* ------------------------------------------------------------------ */
-export const finalCta = {
-  heading: 'Siap memilih paket yang tepat?',
-  description:
-    'Lihat perbandingan paket dan Add-on, lalu pilih yang paling sesuai untuk Anda.',
+export const seo = {
+  // ±50–60 karakter: kata kunci utama di depan, merek di belakang.
+  title: 'Template Wedding Planner Google Sheets | Teman Wedding',
+  // ±140–160 karakter: apa, untuk siapa, isi utama, harga.
+  description: () =>
+    `Template wedding planner di Google Sheets: anggaran, vendor, seserahan, tamu, linimasa, berkas nikah KUA, plus planner lamaran. Mulai ${formatRupiah(Math.min(...plans.map(currentPrice)))}.`,
+  ogImage: 'og-image.png',
+  ogImageAlt: 'Teman Wedding, template wedding planner di Google Sheets',
 }
-
-/* ------------------------------------------------------------------ */
-/* Sosial media (hanya yang berisi URL valid yang dibuat bisa diklik)  */
-/* Hapus item yang tidak dipakai, atau tambah platform lain.           */
-/* ------------------------------------------------------------------ */
-export const socials = [
-  { label: 'Instagram', href: '[LINK INSTAGRAM]' },
-  { label: 'WhatsApp', href: '[LINK WHATSAPP]' },
-  { label: 'Email', href: '[ALAMAT EMAIL]' },
-]

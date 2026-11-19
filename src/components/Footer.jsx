@@ -1,36 +1,29 @@
-import { Leaf } from 'lucide-react'
-import { product, navLinks, socials } from '../data/productData.js'
+import { product, navLinks, contact } from '../data/productData.js'
 import { isRealLink } from '../utils/links.js'
 
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="on-dark bg-brand-deeper text-brand-soft">
-      <div className="container-page py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div>
-            <div className="flex items-center gap-2.5 font-display text-xl font-semibold text-white">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/10">
-                <Leaf className="h-5 w-5" aria-hidden="true" />
-              </span>
-              {product.name}
-            </div>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed">
-              {product.shortDescription}
+    <footer className="bg-canvas">
+      <div className="wrap pb-10 pt-16 sm:pt-20">
+        <div className="grid gap-12 border-t border-ink pt-10 md:grid-cols-12 md:gap-8">
+          <div className="md:col-span-5">
+            <p className="font-serif text-[2rem] leading-none text-ink">{product.name}</p>
+            <p className="mt-3 font-serif text-lg italic text-forest">{product.hashtag}</p>
+            <p className="mt-5 max-w-sm text-[15px] leading-[1.7] text-muted">
+              {product.category} di {product.platform}.
             </p>
           </div>
 
-          <nav aria-label="Navigasi footer">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.14em] !text-white">
-              Navigasi
-            </h2>
-            <ul className="mt-4 space-y-1">
+          <nav aria-label="Navigasi footer" className="md:col-span-3">
+            <h2 className="eyebrow !font-sans !font-medium !text-muted">Halaman</h2>
+            <ul className="mt-4">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="inline-flex min-h-[44px] items-center text-sm transition duration-200 hover:text-white"
+                    className="inline-flex min-h-[40px] items-center text-[15px] text-ink transition-colors duration-200 hover:text-forest"
                   >
                     {link.label}
                   </a>
@@ -39,41 +32,35 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {socials.length > 0 && (
-            <div>
-              <h2 className="text-sm font-semibold uppercase tracking-[0.14em] !text-white">
-                Hubungi kami
-              </h2>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {socials.map((s) => (
-                  <li key={s.label}>
-                    {isRealLink(s.href) ? (
+          <div className="md:col-span-4">
+            <h2 className="eyebrow !font-sans !font-medium !text-muted">Kontak</h2>
+            <dl className="mt-4 space-y-4">
+              {contact.map((c) => (
+                <div key={c.label}>
+                  <dt className="text-[13px] text-muted">{c.label}</dt>
+                  <dd className="mt-0.5 break-words text-[15px]">
+                    {isRealLink(c.href) ? (
                       <a
-                        href={s.href}
-                        target={s.href.startsWith('http') ? '_blank' : undefined}
+                        href={c.href}
+                        target={c.href.startsWith('http') ? '_blank' : undefined}
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-[40px] items-center rounded-full border border-white/25 px-4 text-sm transition duration-200 hover:border-white hover:bg-white/10 hover:text-white"
+                        className="link-underline text-ink"
                       >
-                        {s.label}
+                        {c.value}
                       </a>
                     ) : (
-                      <span
-                        title="Link belum dikonfigurasi"
-                        className="inline-flex min-h-[40px] items-center rounded-full border border-dashed border-white/30 px-4 text-sm opacity-80"
-                      >
-                        {s.label}
-                        <span className="sr-only"> (belum dikonfigurasi)</span>
-                      </span>
+                      <span className="text-ink">{c.value}</span>
                     )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
 
-        <p className="mt-12 border-t border-white/15 pt-6 text-sm">
-          &copy; {year} {product.name}. Hak cipta dilindungi.
+        <p className="mt-16 flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-line pt-6 text-[13px] text-muted">
+          <span suppressHydrationWarning>&copy; {year} {product.name}. Hak cipta dilindungi.</span>
+          <span>Template dilindungi UU No. 28 Tahun 2014 tentang Hak Cipta.</span>
         </p>
       </div>
     </footer>

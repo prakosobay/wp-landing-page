@@ -40,8 +40,8 @@ export default function CtaButton({ href, children, className = '', dark = false
       {showNotice && (
         <p
           role="status"
-          className={`mt-3 flex items-start gap-2 rounded-2xl px-3.5 py-2.5 text-left text-xs leading-relaxed ${
-            dark ? 'bg-white/10 text-white' : 'bg-brand-pale text-muted'
+          className={`mt-3 flex items-start gap-2 px-3.5 py-2.5 text-left text-xs leading-relaxed ${
+            dark ? 'bg-paper/10 text-paper' : 'bg-cream text-muted'
           }`}
         >
           <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />

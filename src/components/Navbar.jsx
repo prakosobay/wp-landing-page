@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Leaf, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { product, navLinks } from '../data/productData.js'
 
 export default function Navbar() {
@@ -37,32 +37,26 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b backdrop-blur transition duration-200 ${
-        scrolled || open
-          ? 'border-brand-soft/70 bg-canvas/95 shadow-sm'
-          : 'border-transparent bg-canvas/80'
+      className={`sticky top-0 z-50 border-b bg-canvas/95 backdrop-blur-sm transition-colors duration-200 ${
+        scrolled || open ? 'border-line' : 'border-transparent'
       }`}
     >
-      <div className="container-page flex h-16 items-center justify-between gap-4">
+      <div className="wrap flex h-[4.5rem] items-center justify-between gap-6">
         <a
           href="#beranda"
           onClick={close}
-          className="flex min-h-[44px] min-w-0 items-center gap-2.5 rounded-full font-display text-lg font-semibold text-brand-dark"
-          aria-label={`${product.name} — kembali ke beranda`}
+          className="flex min-h-[44px] items-center font-serif text-[1.4rem] font-medium tracking-[-0.01em] text-ink"
         >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-dark text-white">
-            <Leaf className="h-5 w-5" aria-hidden="true" />
-          </span>
-          <span className="truncate">{product.name}</span>
+          {product.name}
         </a>
 
         <nav aria-label="Navigasi utama" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="inline-flex min-h-[44px] items-center rounded-full px-4 text-sm font-medium text-muted transition duration-200 hover:bg-brand-pale hover:text-brand-dark"
+                  className="relative inline-flex min-h-[44px] items-center text-[15px] text-ink/80 transition-colors duration-200 after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-forest after:transition-transform after:duration-300 hover:text-ink hover:after:scale-x-100"
                 >
                   {link.label}
                 </a>
@@ -72,48 +66,44 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href="#paket" className="btn btn-primary hidden !py-2 lg:inline-flex">
-            Lihat Paket
+          <a href="#harga" className="btn btn-solid hidden min-h-[44px] px-5 lg:inline-flex">
+            Pilih paket
           </a>
           <button
             ref={toggleRef}
             type="button"
-            className="grid h-11 w-11 place-items-center rounded-full text-brand-dark transition duration-200 hover:bg-brand-pale lg:hidden"
+            className="-mr-2 grid h-11 w-11 place-items-center text-ink lg:hidden"
             aria-label={open ? 'Tutup menu' : 'Buka menu'}
             aria-expanded={open}
             aria-controls="menu-mobile"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? (
-              <X className="h-6 w-6" aria-hidden="true" />
+              <X className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
             ) : (
-              <Menu className="h-6 w-6" aria-hidden="true" />
+              <Menu className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
             )}
           </button>
         </div>
       </div>
 
       {open && (
-        <nav
-          id="menu-mobile"
-          aria-label="Navigasi seluler"
-          className="border-t border-brand-soft/70 lg:hidden"
-        >
-          <ul className="container-page flex flex-col gap-1 py-4">
+        <nav id="menu-mobile" aria-label="Navigasi seluler" className="border-t border-line lg:hidden">
+          <ul className="wrap flex flex-col py-3">
             {navLinks.map((link) => (
-              <li key={link.href}>
+              <li key={link.href} className="border-b border-line/70 last:border-0">
                 <a
                   href={link.href}
                   onClick={close}
-                  className="flex min-h-[48px] items-center rounded-2xl px-4 text-base font-medium text-brand-dark transition duration-200 hover:bg-brand-pale"
+                  className="flex min-h-[52px] items-center font-serif text-xl text-ink"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
-            <li className="pt-2">
-              <a href="#paket" onClick={close} className="btn btn-primary w-full">
-                Lihat Paket
+            <li className="pb-2 pt-4">
+              <a href="#harga" onClick={close} className="btn btn-solid w-full">
+                Pilih paket
               </a>
             </li>
           </ul>

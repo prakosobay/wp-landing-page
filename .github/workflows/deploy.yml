@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Build ulang setiap hari pukul 00:05 WIB, supaya harga, meta SEO, dan
+  # halaman pre-render otomatis kembali normal begitu promo berakhir.
+  schedule:
+    - cron: '5 17 * * *'
 
 permissions:
   contents: read
@@ -36,6 +40,9 @@ jobs:
           # Nama repositori diambil otomatis, tidak perlu diganti manual.
           # Untuk repositori "<username>.github.io", ubah menjadi: /
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # URL publik untuk canonical, Open Graph, sitemap, dan JSON-LD.
+          # Jika memakai domain sendiri, ganti mis. menjadi: https://temanwedding.co/
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
