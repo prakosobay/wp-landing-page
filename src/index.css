@@ -11,24 +11,29 @@
   }
 
   body {
-    @apply bg-canvas font-sans text-ink antialiased;
+    @apply bg-canvas font-sans text-[16px] text-ink antialiased;
     overflow-x: hidden;
+    font-feature-settings: 'kern', 'liga';
   }
 
   h1,
   h2,
   h3 {
-    @apply font-display tracking-tight text-brand-dark;
+    @apply font-serif font-medium text-ink;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    @apply bg-mint text-forest;
   }
 
   :focus-visible {
-    outline: 2px solid theme('colors.brand.dark');
+    outline: 2px solid theme('colors.forest.DEFAULT');
     outline-offset: 3px;
   }
 
-  /* Fokus terlihat pada latar gelap. */
   .on-dark :focus-visible {
-    outline-color: #ffffff;
+    outline-color: theme('colors.paper');
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -47,31 +52,46 @@
 }
 
 @layer components {
-  .container-page {
-    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  .wrap {
+    @apply mx-auto w-full max-w-[76rem] px-4 sm:px-8;
   }
 
-  .section-pad {
-    @apply py-16 sm:py-20 lg:py-24;
+  /* Label kapital berjarak lebar, meniru teks kecil pada undangan cetak. */
+  .eyebrow {
+    @apply font-sans text-[11px] font-medium uppercase leading-relaxed tracking-[0.26em] sm:text-xs;
+  }
+
+  .h-section {
+    @apply text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.06] tracking-[-0.015em];
   }
 
   .btn {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold transition duration-200 sm:text-base;
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2.5 px-6 text-[15px] font-medium tracking-[0.02em] transition-colors duration-200;
   }
 
-  .btn-primary {
-    @apply bg-brand-dark text-white shadow-sm hover:bg-brand-deeper hover:shadow-md active:translate-y-px;
+  .btn-solid {
+    @apply bg-forest text-paper hover:bg-forest-deep;
   }
 
-  .btn-secondary {
-    @apply border border-brand/40 bg-white text-brand-dark hover:border-brand hover:bg-brand-pale;
+  .btn-line {
+    @apply border border-ink/80 text-ink hover:bg-ink hover:text-paper;
   }
 
-  .btn-light {
-    @apply bg-white text-brand-dark shadow-sm hover:bg-brand-pale active:translate-y-px;
+  .btn-paper {
+    @apply bg-paper text-forest hover:bg-mint;
   }
 
-  .card {
-    @apply rounded-3xl border border-brand-soft/70 bg-white shadow-card transition duration-200;
+  .btn-line-light {
+    @apply border border-paper/60 text-paper hover:bg-paper hover:text-forest;
+  }
+
+  .link-underline {
+    @apply underline decoration-line decoration-1 underline-offset-[6px] transition-colors duration-200 hover:decoration-forest;
+  }
+
+  /* Tekstur kertas kraft yang halus untuk latar "meja". */
+  .grain {
+    background-color: theme('colors.kraft');
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }

@@ -1,14 +1,12 @@
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
-import SectionHeader from './SectionHeader.jsx'
-import { faq } from '../data/productData.js'
+import { getFaq, contact } from '../data/productData.js'
 
 function FaqItem({ item, index, open, onToggle }) {
   const buttonId = `faq-tombol-${index}`
   const panelId = `faq-panel-${index}`
 
   return (
-    <div className="card overflow-hidden">
+    <div className="border-b border-line">
       <h3 className="!font-sans">
         <button
           id={buttonId}
@@ -16,15 +14,19 @@ function FaqItem({ item, index, open, onToggle }) {
           aria-expanded={open}
           aria-controls={panelId}
           onClick={onToggle}
-          className="flex min-h-[56px] w-full items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold text-brand-dark transition duration-200 hover:bg-brand-pale/70 sm:px-6 sm:text-lg"
+          className="group flex min-h-[64px] w-full items-center justify-between gap-6 py-5 text-left"
         >
-          <span>{item.question}</span>
-          <ChevronDown
-            className={`h-5 w-5 shrink-0 text-brand transition-transform duration-300 ${
-              open ? 'rotate-180' : ''
-            }`}
-            aria-hidden="true"
-          />
+          <span className="font-serif text-[1.3rem] leading-snug text-ink transition-colors duration-200 group-hover:text-forest sm:text-[1.45rem]">
+            {item.question}
+          </span>
+          <span aria-hidden="true" className="relative h-3.5 w-3.5 shrink-0">
+            <span className="absolute left-0 top-1/2 h-px w-full bg-ink" />
+            <span
+              className={`absolute left-1/2 top-0 h-full w-px bg-ink transition-transform duration-300 ${
+                open ? 'scale-y-0' : 'scale-y-100'
+              }`}
+            />
+          </span>
         </button>
       </h3>
       <div
@@ -37,9 +39,7 @@ function FaqItem({ item, index, open, onToggle }) {
         }`}
       >
         <div className="overflow-hidden">
-          <p className="px-5 pb-5 leading-relaxed text-muted sm:px-6">
-            {item.answer}
-          </p>
+          <p className="max-w-2xl pb-7 pr-8 leading-[1.75] text-muted">{item.answer}</p>
         </div>
       </div>
     </div>
@@ -49,18 +49,38 @@ function FaqItem({ item, index, open, onToggle }) {
 export default function FAQ() {
   // Satu item terbuka pada satu waktu; item pertama terbuka secara default.
   const [openIndex, setOpenIndex] = useState(0)
+  const wa = contact.find((c) => c.label === 'WhatsApp')
+  const faq = getFaq()
 
   return (
-    <section
-      id="faq"
-      aria-labelledby="judul-faq"
-      className="section-pad bg-canvas"
-    >
-      <div className="container-page">
-        <SectionHeader id="judul-faq" eyebrow="FAQ" title={faq.heading} />
+    <section id="faq" aria-labelledby="judul-faq" className="py-20 sm:py-28">
+      <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-28">
+            <p className="eyebrow text-forest">FAQ</p>
+            <h2 id="judul-faq" className="h-section mt-5">
+              Sebelum Anda memesan.
+            </h2>
+            {wa && (
+              <p className="mt-6 max-w-xs leading-[1.7] text-muted">
+                Pertanyaan lain? Kirim pesan ke{' '}
+                <a
+                  href={wa.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline text-ink"
+                >
+                  WhatsApp {wa.value}
+                  <span className="sr-only"> (membuka tab baru)</span>
+                </a>
+                .
+              </p>
+            )}
+          </div>
+        </div>
 
-        <div className="mx-auto mt-12 max-w-3xl space-y-3">
-          {faq.items.map((item, i) => (
+        <div className="border-t border-ink lg:col-span-8">
+          {faq.map((item, i) => (
             <FaqItem
               key={item.question}
               item={item}

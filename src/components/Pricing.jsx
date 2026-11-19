@@ -1,130 +1,129 @@
-import { Check, Info, Plus } from 'lucide-react'
-import SectionHeader from './SectionHeader.jsx'
+import { ArrowRight, Plus } from 'lucide-react'
 import CtaButton from './CtaButton.jsx'
-import { pricing } from '../data/productData.js'
-import { isPlaceholderText } from '../utils/links.js'
+import { Price, PromoStamp } from './Promo.jsx'
+import {
+  plans,
+  included,
+  orderLink,
+  currentPrice,
+  formatRupiah,
+  isPromoActive,
+  promoEndLabel,
+} from '../data/productData.js'
 
-function PlanCard({ plan }) {
-  const isAddon = plan.type === 'addon'
-  const isHighlight = plan.highlight
-
-  const cardStyle = isHighlight
-    ? 'on-dark border-brand-dark bg-brand-dark text-white shadow-lift lg:-translate-y-3'
-    : isAddon
-      ? 'border-dashed border-brand bg-brand-pale/80 shadow-none md:col-span-2 lg:col-span-1'
-      : 'border-brand-soft/80 bg-white shadow-card'
-
-  const titleColor = isHighlight ? 'text-white' : 'text-brand-dark'
-  const mutedColor = isHighlight ? 'text-brand-soft' : 'text-muted'
-  const placeholderPrice = isPlaceholderText(plan.price)
-
-  const buttonStyle = isHighlight
-    ? 'btn btn-light w-full'
-    : isAddon
-      ? 'btn btn-secondary w-full'
-      : 'btn btn-primary w-full'
+function Plan({ plan, dark }) {
+  const line = dark ? 'border-paper/20' : 'border-line'
 
   return (
     <article
-      id={isAddon ? 'addon' : undefined}
       aria-labelledby={`paket-${plan.id}`}
-      className={`relative flex flex-col rounded-3xl border p-7 transition duration-200 hover:shadow-lift sm:p-8 ${
-        isAddon ? 'scroll-mt-24' : ''
-      } ${cardStyle}`}
+      className={`relative flex flex-col px-6 py-10 sm:px-10 sm:py-12 ${
+        dark ? 'on-dark bg-forest text-paper' : 'bg-paper text-ink'
+      }`}
     >
-      <div className="flex min-h-[28px] items-center justify-between gap-3">
+      <PromoStamp dark={dark} className="absolute right-5 top-5 sm:right-8 sm:top-8" />
+
+      <div className="pr-24">
+        {/* baris label selalu ada agar harga kedua paket sejajar */}
+        <p className={`eyebrow min-h-[1.1rem] !text-[10px] ${dark ? 'text-sage-soft' : 'text-forest'}`}>
+          {plan.badge}
+        </p>
         <h3
           id={`paket-${plan.id}`}
-          className={`flex items-center gap-2 text-2xl font-semibold ${titleColor}`}
+          className={`mt-2 text-[1.7rem] leading-[1.15] sm:text-[2rem] ${dark ? '!text-paper' : ''}`}
         >
-          {isAddon && <Plus className="h-5 w-5" aria-hidden="true" />}
           {plan.name}
         </h3>
-        {plan.badge && (
-          <span
-            className={`rounded-full px-3 py-1 text-[13px] font-semibold ${
-              isHighlight
-                ? 'bg-brand-soft text-brand-dark'
-                : 'border border-brand text-brand-dark'
-            }`}
-          >
-            {plan.badge}
-          </span>
-        )}
       </div>
 
-      <p className={`mt-3 text-sm leading-relaxed sm:text-base ${mutedColor}`}>
-        {plan.description}
-      </p>
-
-      <div className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span
-          className={`font-display font-semibold ${
-            placeholderPrice ? 'text-2xl sm:text-3xl' : 'text-4xl'
-          } ${titleColor}`}
-        >
-          {plan.price}
-        </span>
-        {plan.priceNote && (
-          <span className={`text-sm ${mutedColor}`}>{plan.priceNote}</span>
-        )}
+      <div className="mt-8">
+        <Price plan={plan} dark={dark} />
       </div>
+      <p className={`mt-4 max-w-xs leading-[1.6] ${dark ? 'text-paper/80' : 'text-muted'}`}>{plan.summary}</p>
 
-      <hr
-        className={`my-6 ${isHighlight ? 'border-white/20' : 'border-brand-soft'}`}
-      />
-
-      <ul className="flex-1 space-y-3">
+      <ul className={`mt-8 border-t ${line}`}>
         {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-3 text-sm sm:text-base">
-            <span
-              className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${
-                isHighlight ? 'bg-brand-soft text-brand-dark' : 'bg-brand text-white'
-              }`}
-            >
-              <Check className="h-3 w-3" strokeWidth={3} aria-hidden="true" />
+          <li key={feature} className={`flex gap-3 border-b py-3 text-[15px] leading-[1.55] ${line}`}>
+            <span aria-hidden="true" className={dark ? 'text-sage-soft' : 'text-sage'}>
+              —
             </span>
-            <span className={isHighlight ? 'text-white' : 'text-ink'}>{feature}</span>
+            {feature}
           </li>
         ))}
       </ul>
 
-      <div className="mt-8">
-        <CtaButton href={plan.cta.href} className={buttonStyle} dark={isHighlight}>
-          {plan.cta.label}
+      <p className={`eyebrow mt-7 !text-[10px] ${dark ? 'text-paper/60' : 'text-muted'}`}>Termasuk file</p>
+      <ul className="mt-2 flex-1 space-y-1">
+        {plan.bundled.map((name) => (
+          <li key={name} className="flex items-center gap-2 font-serif text-lg italic">
+            <Plus className={`h-4 w-4 ${dark ? 'text-sage-soft' : 'text-sage'}`} strokeWidth={1.5} aria-hidden="true" />
+            {name}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-10">
+        <CtaButton href={orderLink(plan)} dark={dark} className={`btn w-full ${dark ? 'btn-paper' : 'btn-solid'}`}>
+          Pesan {plan.shortName}
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
         </CtaButton>
+
+        {plan.upgrade && (
+          <p className={`mt-4 text-center text-[14px] ${dark ? 'text-paper/75' : 'text-muted'}`}>
+            atau{' '}
+            <a
+              href={orderLink(plan, true)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`link-underline ${dark ? 'text-paper' : 'text-ink'}`}
+            >
+              + {plan.upgrade.name} ({formatRupiah(currentPrice(plan) + plan.upgrade.price)})
+              <span className="sr-only"> (membuka tab baru)</span>
+            </a>
+          </p>
+        )}
       </div>
     </article>
   )
 }
 
 export default function Pricing() {
-  return (
-    <section
-      id="paket"
-      aria-labelledby="judul-paket"
-      className="section-pad bg-canvas"
-    >
-      <div className="container-page">
-        <SectionHeader
-          id="judul-paket"
-          eyebrow="Pricing"
-          title={pricing.heading}
-          description={pricing.description}
-        />
+  const end = promoEndLabel()
 
-        <div className="mt-14 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {pricing.plans.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} />
+  return (
+    <section id="harga" aria-labelledby="judul-harga" className="grain py-20 sm:py-28">
+      <div className="wrap">
+        <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-7">
+            <p className="eyebrow text-forest">
+              Harga{isPromoActive() && ' · Promo launching'}
+              {isPromoActive() && end && ` s.d. ${end}`}
+            </p>
+            <h2 id="judul-harga" className="h-section mt-5">
+              Dua paket. Pilih sesuai <em className="font-normal text-sage">kebutuhan</em> persiapan Anda.
+            </h2>
+          </div>
+          <p className="max-w-md leading-[1.7] text-ink/75 lg:col-span-4 lg:col-start-9 lg:self-end">
+            Essensial untuk mencatat inti persiapan. Complete bila Anda juga ingin mengelola tabungan,
+            mengurus berkas nikah, dan menyiapkan obrolan penting sebelum menikah.
+          </p>
+        </div>
+
+        <div className="mt-12 grid shadow-paper md:grid-cols-2 lg:mt-16">
+          {plans.map((plan, i) => (
+            <Plan key={plan.id} plan={plan} dark={i === plans.length - 1} />
           ))}
         </div>
 
-        {pricing.note && (
-          <p className="mx-auto mt-8 flex max-w-2xl items-start justify-center gap-2 text-center text-sm text-muted">
-            <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            <span>{pricing.note}</span>
-          </p>
-        )}
+        <p className="mt-6 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-ink/70">
+          <span className="text-ink">Di kedua paket:</span>
+          {included.map((item, i) => (
+            <span key={item}>
+              {item}
+              {i < included.length - 1 && <span aria-hidden="true" className="ml-3 text-ink/30">·</span>}
+            </span>
+          ))}
+        </p>
       </div>
     </section>
   )
