@@ -100,18 +100,7 @@ export default function Hero() {
   return (
     <section id="beranda" aria-labelledby="judul-hero">
       <div className="wrap pt-6 sm:pt-10">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-ink pb-4 text-[13px] tracking-[0.04em]">
-          <p className="text-ink/80">
-            <span className="text-forest">{product.name}</span>
-            <span className="mx-2 text-ink/40" aria-hidden="true">/</span>
-            {product.category.toLowerCase()}
-          </p>
-          <p className="text-muted">
-            {product.platform} · versi {product.version}
-          </p>
-        </div>
-
-        <div className="grid gap-10 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20">
+        <div className="grid gap-10 pb-16 sm:pb-20 lg:grid-cols-12 lg:gap-8">
           <div className="animate-fade-up lg:col-span-8">
             <h1
               id="judul-hero"
