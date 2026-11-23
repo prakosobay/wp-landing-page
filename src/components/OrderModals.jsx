@@ -172,7 +172,7 @@ function useCountdown() {
   }
 }
 
-function PromoDialog({ onClose }) {
+function PromoDialog({ onClose, onPickEssensial }) {
   const countdown = useCountdown()
   const chat = whatsapp('Halo Teman Wedding, saya mau bertanya soal promo launching.')
 
@@ -214,6 +214,10 @@ function PromoDialog({ onClose }) {
           <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
           <span className="sr-only"> (membuka tab baru)</span>
         </a>
+        {/* Essensial selalu lewat pop-up upgrade, sama seperti di kartu harga. */}
+        <button type="button" onClick={onPickEssensial} className="btn btn-line w-full">
+          Pesan {essensial.shortName} · {formatRupiah(currentPrice(essensial))}
+        </button>
         <a href="#isi" onClick={onClose} className="link-underline inline-flex items-center gap-2 text-[15px] text-forest">
           <Eye className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
           Atau lihat isi file dulu
@@ -295,7 +299,7 @@ export function OrderProvider({ children }) {
     <OrderContext.Provider value={value}>
       {children}
       {upsellOpen && <UpsellDialog onClose={closeUpsell} />}
-      {promoOpen && <PromoDialog onClose={closePromo} />}
+      {promoOpen && <PromoDialog onClose={closePromo} onPickEssensial={openUpsell} />}
     </OrderContext.Provider>
   )
 }

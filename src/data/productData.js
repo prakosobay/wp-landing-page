@@ -327,9 +327,9 @@ export const orderLink = (plan) => plan.checkoutUrl || whatsapp(orderMessage(pla
 
 /** Nilai tambah Complete dibanding Essensial (dipakai pop-up upgrade). */
 export const upgradePerks = [
+  'Dashboard lengkap: 8 grafik dan pengingat tenggat',
   'Tabungan dengan target nabung per bulan otomatis',
   `Alur Pendaftaran: ${registration.total} berkas nikah, RT/RW sampai KUA`,
-  'Dashboard lengkap: 8 grafik dan pengingat tenggat',
   'Bonus Teman Lamaran dan Deep Talk Couples',
 ]
 
