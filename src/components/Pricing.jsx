@@ -1,15 +1,45 @@
 import { ArrowRight, Plus } from 'lucide-react'
 import CtaButton from './CtaButton.jsx'
-import { Price, PromoStamp } from './Promo.jsx'
+import { Price, PromoStamp, PromoUntil } from './Promo.jsx'
+import { useOrder } from './OrderModals.jsx'
 import {
   plans,
   included,
   orderLink,
-  currentPrice,
-  formatRupiah,
   isPromoActive,
-  promoEndLabel,
 } from '../data/productData.js'
+
+/** Essensial membuka pop-up penawaran upgrade; Complete langsung ke pemesanan. */
+function PlanCta({ plan, dark }) {
+  const { openUpsell } = useOrder()
+  const className = `btn w-full ${dark ? 'btn-paper' : 'btn-solid'}`
+  const arrow = <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+
+  if (plan.id === 'essensial') {
+    return (
+      <a
+        href={orderLink(plan)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        onClick={(e) => {
+          e.preventDefault()
+          openUpsell()
+        }}
+      >
+        Pesan {plan.shortName}
+        {arrow}
+      </a>
+    )
+  }
+
+  return (
+    <CtaButton href={orderLink(plan)} dark={dark} className={className}>
+      Pesan {plan.shortName}
+      {arrow}
+    </CtaButton>
+  )
+}
 
 function Plan({ plan, dark }) {
   const line = dark ? 'border-paper/20' : 'border-line'
@@ -52,44 +82,30 @@ function Plan({ plan, dark }) {
         ))}
       </ul>
 
-      <p className={`eyebrow mt-7 !text-[10px] ${dark ? 'text-paper/60' : 'text-muted'}`}>Termasuk file</p>
-      <ul className="mt-2 flex-1 space-y-1">
-        {plan.bundled.map((name) => (
-          <li key={name} className="flex items-center gap-2 font-serif text-lg italic">
-            <Plus className={`h-4 w-4 ${dark ? 'text-sage-soft' : 'text-sage'}`} strokeWidth={1.5} aria-hidden="true" />
-            {name}
-          </li>
-        ))}
-      </ul>
+      {plan.bundled.length > 0 ? (
+        <>
+          <p className={`eyebrow mt-7 !text-[10px] ${dark ? 'text-paper/60' : 'text-muted'}`}>Bonus file</p>
+          <ul className="mt-2 flex-1 space-y-1">
+            {plan.bundled.map((name) => (
+              <li key={name} className="flex items-center gap-2 font-serif text-lg italic">
+                <Plus className={`h-4 w-4 ${dark ? 'text-sage-soft' : 'text-sage'}`} strokeWidth={1.5} aria-hidden="true" />
+                {name}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div className="flex-1" />
+      )}
 
       <div className="mt-10">
-        <CtaButton href={orderLink(plan)} dark={dark} className={`btn w-full ${dark ? 'btn-paper' : 'btn-solid'}`}>
-          Pesan {plan.shortName}
-          <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-        </CtaButton>
-
-        {plan.upgrade && (
-          <p className={`mt-4 text-center text-[14px] ${dark ? 'text-paper/75' : 'text-muted'}`}>
-            atau{' '}
-            <a
-              href={orderLink(plan, true)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`link-underline ${dark ? 'text-paper' : 'text-ink'}`}
-            >
-              + {plan.upgrade.name} ({formatRupiah(currentPrice(plan) + plan.upgrade.price)})
-              <span className="sr-only"> (membuka tab baru)</span>
-            </a>
-          </p>
-        )}
+        <PlanCta plan={plan} dark={dark} />
       </div>
     </article>
   )
 }
 
 export default function Pricing() {
-  const end = promoEndLabel()
-
   return (
     <section id="harga" aria-labelledby="judul-harga" className="grain py-20 sm:py-28">
       <div className="wrap">
@@ -97,7 +113,7 @@ export default function Pricing() {
           <div className="lg:col-span-7">
             <p className="eyebrow text-forest">
               Harga{isPromoActive() && ' · Promo launching'}
-              {isPromoActive() && end && ` s.d. ${end}`}
+              {isPromoActive() && <PromoUntil />}
             </p>
             <h2 id="judul-harga" className="h-section mt-5">
               Dua paket. Pilih sesuai <em className="font-normal text-sage">kebutuhan</em> persiapan Anda.

@@ -18,12 +18,18 @@ export const promo = {
   // Hari terakhir promo (WIB), format 'YYYY-MM-DD'. Setelah tanggal ini harga
   // otomatis kembali normal. null = promo aktif tanpa batas tanggal.
   endsAt: '2026-12-31',
+  // Pop-up ajakan beli: muncul setelah halaman dibuka selama delayMs.
+  // oncePerSession: true = tidak muncul lagi di tab yang sama setelah pernah tampil.
+  popup: { delayMs: 15000, oncePerSession: true },
 }
+
+/** Akhir promo sebagai Date (WIB), atau null bila tanpa batas tanggal. */
+export const promoEndDate = () => (promo.endsAt ? new Date(`${promo.endsAt}T23:59:59+07:00`) : null)
 
 export const isPromoActive = (now = new Date()) => {
   if (!promo.active) return false
   if (!promo.endsAt) return true
-  return now <= new Date(`${promo.endsAt}T23:59:59+07:00`)
+  return now <= promoEndDate()
 }
 
 export const promoEndLabel = (short = false) =>
@@ -114,7 +120,11 @@ export const companions = {
     tagline: 'Planner persiapan lamaran',
     description:
       'Sebelum hari H pernikahan, ada hari lamaran. Info acara, anggaran, dan daftar tugasnya tercatat rapi, dan prioritas tiap tugas dihitung otomatis dari tenggatnya.',
-    sheets: ['Info Lamaran', 'Anggaran Lamaran', 'Task List Lamaran'],
+    sheets: [
+      { name: 'Info Lamaran', note: 'Waktu, tempat, dan rangkaian acara' },
+      { name: 'Anggaran Lamaran', note: 'Anggaran dan pengeluaran acara' },
+      { name: 'Task List Lamaran', note: 'Tugas, prioritas dihitung dari tenggat' },
+    ],
   },
   deeptalk: {
     name: 'Deep Talk Couples',
@@ -123,9 +133,20 @@ export const companions = {
       'Dijawab sendiri-sendiri, dibahas berdua. Jawaban baru terbuka setelah kalian berdua menjawab pertanyaan yang sama.',
     topics: 17,
     questions: 100,
-    sampleQuestion:
-      'Saat sedang sedih atau stres, apa yang kamu butuhkan dariku: didengarkan, diberi solusi, atau diberi ruang?',
-    sampleCategory: 'Komunikasi',
+    samples: [
+      {
+        category: 'Masa Depan',
+        question: 'Seperti apa gambaran rumah tangga ideal menurutmu lima tahun setelah menikah?',
+      },
+      {
+        category: 'Keuangan',
+        question: 'Berapa persen penghasilan yang ingin kita tabung atau investasikan setiap bulan?',
+      },
+      {
+        category: 'Komunikasi',
+        question: 'Bagaimana aku bisa tahu bahwa kamu sedang tidak baik-baik saja?',
+      },
+    ],
   },
 }
 
@@ -137,93 +158,93 @@ export const sheets = [
   {
     name: 'Dashboard',
     description:
-      'Ringkasan yang terisi sendiri: hitung mundur hari H, progres linimasa, anggaran terpakai, dan total tamu. Versi Complete menambah progres berkas, tabungan, 8 grafik, dan panel pengingat tenggat.',
+      'Ringkasan otomatis: hitung mundur, linimasa, anggaran, dan tamu. Complete menambah grafik dan pengingat.',
     essensial: 'Ringkas',
     complete: 'Lengkap',
   },
   {
     name: 'Master Data',
     description:
-      'Nama CPP & CPW, tanggal, dan kota cukup diisi sekali; judul di semua sheet ikut berubah. Kategori di sini menjadi pilihan dropdown di sheet lain.',
+      'Isi nama, tanggal, dan kota sekali; semua sheet ikut terisi.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Vendor Comparison',
     description:
-      'Bandingkan harga, paket, kelebihan, dan kekurangan beberapa vendor dalam kategori yang sama sebelum memesan.',
+      'Bandingkan harga dan paket beberapa vendor sebelum memesan.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Daftar Vendor',
     description:
-      'Kontak vendor, estimasi biaya, serta DP, termin 1 dan 2, dan pelunasan. Biaya aktual terjumlah otomatis.',
+      'Kontak, estimasi biaya, DP, termin, dan pelunasan vendor.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Rencana Anggaran',
     description:
-      'Batas anggaran, realisasi, sisa tagihan, status pembayaran, dan jatuh tempo untuk setiap kategori.',
+      'Batas anggaran, realisasi, dan jatuh tempo tiap kategori.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Daftar Seserahan',
     description:
-      'Estimasi dan harga aktual tiap barang, tenggat beli, dan link toko. Totalnya masuk ke Rencana Anggaran.',
+      'Estimasi, harga aktual, dan link toko tiap barang.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Tabungan',
     description:
-      'Catat setoran dari tiap sumber dana. Target nabung per bulan dihitung dari sisa waktu menuju hari H.',
+      'Catat setoran; target nabung per bulan dihitung otomatis.',
     essensial: false,
     complete: true,
   },
   {
     name: 'Linimasa Pernikahan',
     description:
-      'Kegiatan, penanggung jawab, dan tenggat. Sisa waktu dan prioritas terisi otomatis.',
+      'Kegiatan, penanggung jawab, dan tenggat dengan prioritas otomatis.',
     essensial: true,
     complete: true,
   },
   {
     name: 'Alur Pendaftaran',
-    description: 'Peta lengkap berkas nikah, dari RT/RW sampai KUA.',
+    description: 'Peta berkas nikah, dari RT/RW sampai KUA.',
     essensial: false,
     complete: true,
   },
   {
     name: 'Daftar Tamu',
     description:
-      'Tamu per pihak, pax akad, VIP, dan reguler, jenis undangan, serta status pengiriman undangan.',
+      'Tamu per pihak, jenis undangan, dan status pengiriman.',
     essensial: true,
     complete: true,
   },
   {
     name: 'List Lagu',
     description:
-      '50 referensi lagu pernikahan per momen acara, siap dikurasi menjadi wajib putar atau cadangan.',
+      '50 referensi lagu pernikahan per momen acara.',
     essensial: true,
     complete: true,
   },
 ]
 
-/** Baris file pendamping di tabel daftar isi. */
+/** Baris file pendamping di tabel daftar isi (keduanya khusus Complete). */
 export const companionRows = [
   {
     name: companions.lamaran.name,
     description: companions.lamaran.tagline,
-    essensial: true,
+    essensial: false,
     complete: true,
   },
   {
     name: companions.deeptalk.name,
     description: companions.deeptalk.tagline,
-    essensial: '+Rp15rb',
+    essensial: false,
     complete: true,
   },
 ]
@@ -268,15 +289,14 @@ export const plans = [
     shortName: 'Essensial',
     price: 59000,
     promoPrice: 39000,
-    summary: 'Catatan inti persiapan nikah, ditambah planner lamaran.',
+    summary: 'Catatan inti persiapan nikah: anggaran, vendor, seserahan, tamu, dan linimasa.',
     features: [
       'Dashboard ringkas: hitung mundur, progres linimasa, anggaran, total tamu',
       'Master Data, Vendor Comparison, dan Daftar Vendor',
       'Rencana Anggaran dan Daftar Seserahan',
       'Linimasa Pernikahan, Daftar Tamu, dan List Lagu',
     ],
-    bundled: [companions.lamaran.name],
-    upgrade: { name: companions.deeptalk.name, price: 15000 },
+    bundled: [],
     checkoutUrl: '',
   },
   {
@@ -286,27 +306,32 @@ export const plans = [
     price: 139000,
     promoPrice: 74000,
     badge: 'Paling lengkap',
-    summary: 'Seluruh isi Essensial, ditambah dana, berkas nikah, dan deep talk.',
+    summary: 'Seluruh isi Essensial, ditambah tabungan, berkas nikah, Teman Lamaran, dan Deep Talk.',
     features: [
-      'Semua isi planner Essensial',
+      'Dashboard lengkap: 6 angka ringkasan, 8 grafik, pengingat tenggat',
       'Tabungan dengan target nabung per bulan otomatis',
       'Alur Pendaftaran berkas nikah, RT/RW sampai KUA',
-      'Dashboard lengkap: 6 angka ringkasan, 8 grafik, pengingat tenggat',
+      'Semua isi planner Essensial',
     ],
     bundled: [companions.lamaran.name, companions.deeptalk.name],
     checkoutUrl: '',
   },
 ]
 
+/** Pesan WhatsApp untuk memesan sebuah paket (sesuai paket yang dipilih). */
+export const orderMessage = (plan) =>
+  `Halo Teman Wedding, saya mau pesan ${plan.name} (${formatRupiah(currentPrice(plan))}).`
+
 /** Link pemesanan sebuah paket (checkout bila ada, selain itu WhatsApp). */
-export const orderLink = (plan, withUpgrade = false) => {
-  if (plan.checkoutUrl && !withUpgrade) return plan.checkoutUrl
-  const total = currentPrice(plan) + (withUpgrade ? plan.upgrade.price : 0)
-  const extra = withUpgrade ? ` + ${plan.upgrade.name}` : ''
-  return whatsapp(
-    `Halo Teman Wedding, saya mau pesan ${plan.name}${extra} (${formatRupiah(total)}).`,
-  )
-}
+export const orderLink = (plan) => plan.checkoutUrl || whatsapp(orderMessage(plan))
+
+/** Nilai tambah Complete dibanding Essensial (dipakai pop-up upgrade). */
+export const upgradePerks = [
+  'Tabungan dengan target nabung per bulan otomatis',
+  `Alur Pendaftaran: ${registration.total} berkas nikah, RT/RW sampai KUA`,
+  'Dashboard lengkap: 8 grafik dan pengingat tenggat',
+  'Bonus Teman Lamaran dan Deep Talk Couples',
+]
 
 export const included = [
   'Google Sheets',
@@ -324,16 +349,12 @@ export const getFaq = () => {
   const items = [
     {
       question: 'Apa bedanya Essensial dan Complete?',
-      answer: `${essensial.name} berisi planner pernikahan dengan dashboard ringkas dan 8 sheet kerja, ditambah Teman Lamaran. ${complete.name} berisi semuanya, ditambah sheet Tabungan, Alur Pendaftaran berkas nikah, dashboard lengkap dengan grafik dan pengingat tenggat, serta Deep Talk Couples.`,
+      answer: `${essensial.name} berisi planner pernikahan dengan dashboard ringkas dan 8 sheet kerja, tanpa file bonus. ${complete.name} berisi semuanya, ditambah sheet Tabungan, Alur Pendaftaran berkas nikah, dashboard lengkap dengan grafik dan pengingat tenggat, serta Deep Talk Couples.`,
     },
     {
       question: 'Apa itu Teman Lamaran dan Deep Talk Couples?',
       answer:
-        'Teman Lamaran adalah planner untuk acara lamaran: info acara, anggaran, dan daftar tugas. Deep Talk Couples berisi 100 pertanyaan sebelum menikah dalam 17 topik, dijawab terpisah oleh masing-masing calon, lalu dibahas berdua.',
-    },
-    {
-      question: 'Bisakah Essensial ditambah Deep Talk Couples saja?',
-      answer: `Bisa. Tambah ${formatRupiah(essensial.upgrade.price)} saat memesan ${essensial.name}.`,
+        'Keduanya bonus khusus paket Complete. Teman Lamaran adalah planner untuk acara lamaran: info acara, anggaran, dan daftar tugas. Deep Talk Couples berisi 100 pertanyaan sebelum menikah dalam 17 topik, dijawab terpisah oleh masing-masing calon, lalu dibahas berdua.',
     },
   ]
 
@@ -364,7 +385,7 @@ export const getFaq = () => {
     {
       question: 'Boleh dibagikan ke pasangan, keluarga, atau WO?',
       answer:
-        'Boleh. Anda dapat membagikan akses salinan Anda kepada pasangan, keluarga, atau wedding organizer yang membantu persiapan. Lisensinya untuk satu pasangan, dan template tidak boleh dijual kembali atau dibagikan sebagai template.',
+        'Boleh. Anda bisa membagikan akses salinan Anda kepada pasangan, keluarga, atau wedding organizer yang membantu persiapan. Lisensi berlaku untuk satu pasangan, jadi template tidak boleh dijual kembali atau dibagikan ulang sebagai template.',
     },
     {
       question: 'Apakah sudah ada contoh pengisian?',
@@ -382,7 +403,7 @@ export const seo = {
   title: 'Template Wedding Planner Google Sheets | Teman Wedding',
   // ±140–160 karakter: apa, untuk siapa, isi utama, harga.
   description: () =>
-    `Template wedding planner di Google Sheets: anggaran, vendor, seserahan, tamu, linimasa, berkas nikah KUA, plus planner lamaran. Mulai ${formatRupiah(Math.min(...plans.map(currentPrice)))}.`,
+    `Template wedding planner di Google Sheets: anggaran, vendor, seserahan, tamu, linimasa, berkas nikah KUA, plus bonus planner lamaran dan deep talk. Mulai ${formatRupiah(Math.min(...plans.map(currentPrice)))}.`,
   ogImage: 'og-image.png',
   ogImageAlt: 'Teman Wedding, template wedding planner di Google Sheets',
 }

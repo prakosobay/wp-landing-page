@@ -4,10 +4,13 @@ Landing page satu halaman untuk **Teman Wedding**, template wedding planner di G
 
 | Paket | Isi | Normal | Promo launching |
 | --- | --- | --- | --- |
-| Essensial Wedding Planner | Planner (Lite) + Teman Lamaran | Rp59.000 | Rp39.000 |
+| Essensial Wedding Planner | Planner (Lite), tanpa file bonus | Rp59.000 | Rp39.000 |
 | Complete Wedding Planner | Planner (Premium) + Teman Lamaran + Deep Talk Couples | Rp139.000 | Rp74.000 |
 
-Essensial bisa ditambah Deep Talk Couples seharga Rp15.000.
+Teman Lamaran dan Deep Talk Couples adalah bonus khusus Complete. Memilih Essensial membuka pop-up penawaran upgrade ke Complete; pesan WhatsApp mengikuti paket yang dipilih akhirnya.
+
+Pop-up ajakan beli (promo launching) muncul 15 detik setelah halaman dibuka; atur di `promo.popup` pada `productData.js` (`delayMs`, `oncePerSession`).
+
 Dibangun dengan React, Vite, dan Tailwind CSS v3, siap di-deploy sebagai situs statis di GitHub Pages.
 
 Isi fitur diambil dari file `Teman Wedding Lite.xlsx`, `Teman Wedding Premium.xlsx`, `Teman Lamaran.xlsx`, dan `Deeptalk Couples.xlsx` (versi 1.0).
@@ -146,14 +149,15 @@ Jika Anda mengganti nama repositori, tidak ada yang perlu diubah di kode.
 ```text
 product-landing-page/
 ├── .github/workflows/deploy.yml   # deploy GitHub Pages
-├── public/favicon.svg
+├── public/                        # favicon & apple-touch-icon (dari logo TW), dashboard-anggaran.webp, og-image.png
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx, Hero.jsx        # hero + komposisi flat-lay (amplop & kartu)
 │   │   ├── Contents.jsx                # daftar isi file, kolom Lite/Premium
 │   │   ├── Registration.jsx            # teaser Complete: 28 berkas nikah
 │   │   ├── Companions.jsx              # Teman Lamaran & Deep Talk Couples
-│   │   ├── Promo.jsx                   # pita promo, stempel, harga coret
+│   │   ├── Promo.jsx                   # pita promo, stempel, harga coret, tanggal promo
+│   │   ├── OrderModals.jsx             # pop-up promo (15 dtk) & pop-up upgrade Essensial → Complete
 │   │   ├── HowItWorks.jsx              # cara pakai + potongan sheet Master Data
 │   │   ├── Pricing.jsx, FAQ.jsx
 │   │   ├── FinalCTA.jsx, Footer.jsx    # penutup bergaya kartu undangan

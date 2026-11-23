@@ -9,10 +9,11 @@ import FAQ from './components/FAQ.jsx'
 import FinalCTA from './components/FinalCTA.jsx'
 import Footer from './components/Footer.jsx'
 import { PromoBar } from './components/Promo.jsx'
+import { OrderProvider } from './components/OrderModals.jsx'
 
 export default function App() {
   return (
-    <>
+    <OrderProvider>
       <a
         href="#konten"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-forest focus:px-5 focus:py-3 focus:text-paper"
@@ -32,6 +33,6 @@ export default function App() {
         <FinalCTA />
       </main>
       <Footer />
-    </>
+    </OrderProvider>
   )
 }

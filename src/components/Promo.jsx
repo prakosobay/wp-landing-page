@@ -31,6 +31,23 @@ export function PromoStamp({ dark = false, className = '' }) {
   )
 }
 
+/** Tanggal akhir promo, dibuat menonjol (tebal + sorotan). */
+export function PromoUntil({ dark = false, short = false }) {
+  const end = promoEndLabel(short)
+  if (!end) return null
+  return (
+    <>
+      {' '}
+      s.d.{' '}
+      <strong
+        className={`px-1.5 py-0.5 font-bold ${dark ? 'bg-paper/20 text-paper' : 'bg-mint text-forest'}`}
+      >
+        {end}
+      </strong>
+    </>
+  )
+}
+
 /** Harga normal dicoret + harga promo, atau harga normal saja. */
 export function Price({ plan, dark = false }) {
   const onPromo = isPromoActive() && plan.promoPrice
@@ -75,11 +92,11 @@ export function PromoBar() {
               {formatRupiah(currentPrice(p))}
             </span>
           ))}
-          {end && <span className="text-paper/70"> · s.d. {end}</span>}
+          {end && <span className="text-paper/70"> ·<PromoUntil dark /></span>}
         </span>
         <span className="whitespace-nowrap sm:hidden">
           mulai {formatRupiah(Math.min(...plans.map(currentPrice)))}
-          {end && <span className="text-paper/70"> · s.d. {promoEndLabel(true)}</span>}
+          {end && <span className="text-paper/70"> ·<PromoUntil dark short /></span>}
         </span>
         <ArrowRight className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
       </a>
