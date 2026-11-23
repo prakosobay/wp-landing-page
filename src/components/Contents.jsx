@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import { sheets, companionRows, plans } from '../data/productData.js'
 
 const [essensial, complete] = plans
@@ -8,7 +9,7 @@ function Availability({ value }) {
   }
   return value ? (
     <>
-      <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-forest" />
+      <Check className="inline-block h-4 w-4 text-forest" strokeWidth={2} aria-hidden="true" />
       <span className="sr-only">Termasuk</span>
     </>
   ) : (
@@ -51,7 +52,7 @@ function Count({ plan, sheetsCount, filesCount, accent }) {
         {sheetsCount} sheet
       </dd>
       <dd className="mt-1 text-[13px] text-muted">
-        + {filesCount} file pendamping
+        {filesCount > 0 ? `+ ${filesCount} file pendamping` : 'tanpa file pendamping'}
       </dd>
     </div>
   )

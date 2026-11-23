@@ -20,3 +20,31 @@ npm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Claude Code (konfigurasi & instruksi lokal)
+.claude/
+CLAUDE.md
+.mcp.json
+
+# Aset mentah & berkas produk (tidak dipakai website; versi teroptimasi ada di public/)
+product/
+Teman Wedding Icon.png
+*.xlsx
+*.xls
+*.zip
+*.psd
+*.fig
+
+# Cache & hasil test
+.vite/
+.cache/
+.eslintcache
+coverage/
+*.tsbuildinfo
+
+# File sementara / OS
+*.tmp
+*.bak
+*.orig
+*.swp
+desktop.ini
