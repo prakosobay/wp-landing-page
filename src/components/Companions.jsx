@@ -146,8 +146,8 @@ export default function Companions() {
       <div className="wrap">
         <p className="eyebrow text-forest">Bonus file · Khusus {complete.shortName}</p>
         <h2 id="judul-bonus" className="h-section mt-5 max-w-3xl">
-          Bukan hanya hari H. Juga lamarannya, dan <em className="font-normal text-sage">obrolan</em> penting
-          sebelumnya.
+          Bukan cuma hari H. Ada juga <em className="font-normal text-sage">obrolan</em> penting sebelum
+          menikah, dan lamarannya.
         </h2>
 
         <div role="tablist" aria-label="Pilih bonus file" className="mt-12 flex gap-8 border-b border-ink/20">
