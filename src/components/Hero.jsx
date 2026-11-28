@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import Envelope from './Envelope.jsx'
+import FeatureCards from './FeatureCards.jsx'
 import { PromoUntil } from './Promo.jsx'
 import {
   product,
@@ -15,41 +16,6 @@ import {
 } from '../data/productData.js'
 
 const lowest = plans.reduce((a, b) => (currentPrice(b) < currentPrice(a) ? b : a))
-
-/** Kartu utama: ringkasan Dashboard yang disusun seperti undangan cetak. */
-function SummaryCard({ className = '' }) {
-  return (
-    <div className={`bg-paper px-6 py-10 text-center shadow-paper sm:px-10 sm:py-12 ${className}`}>
-      <p className="eyebrow text-muted">Ringkasan persiapan</p>
-
-      <p className="mt-6 font-serif text-[1.55rem] uppercase leading-[1.5] tracking-[0.2em] text-forest sm:text-[1.9rem]">
-        {sample.couple[0]}
-        <span className="block font-normal normal-case italic tracking-normal text-sage">&amp;</span>
-        {sample.couple[1]}
-      </p>
-
-      <div className="mx-auto my-7 h-px w-10 bg-sage/50" aria-hidden="true" />
-
-      <p className="font-serif text-[4.25rem] font-light leading-none text-forest sm:text-[5rem]">
-        {sample.countdown}
-      </p>
-      <p className="eyebrow mt-3 text-muted">hari menuju hari H</p>
-
-      <p className="eyebrow mt-8 text-forest">
-        {sample.date} · {sample.city}
-      </p>
-
-      <dl className="mx-auto mt-6 max-w-[17rem] border-t border-line text-left text-[13px]">
-        {sample.rows.map((row) => (
-          <div key={row.label} className="flex justify-between gap-4 border-b border-line py-2">
-            <dt className="text-muted">{row.label}</dt>
-            <dd className="text-right text-ink">{row.value}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  )
-}
 
 /** Kartu kecil di samping, seperti kartu "the details" pada set undangan. */
 function DetailCard({ className = '' }) {
@@ -80,11 +46,11 @@ function StationeryScene() {
     <figure className="grain">
       <div className="wrap py-14 sm:py-20 lg:py-24">
         <div className="mx-auto grid max-w-5xl items-start gap-10 md:grid-cols-[minmax(0,1fr)_15rem] lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-16">
-          <div className="relative">
+          <div className="relative min-w-0">
             <div className="absolute left-0 top-0 w-[58%] shadow-paper sm:w-[50%]">
               <Envelope />
             </div>
-            <SummaryCard className="relative ml-[12%] mt-[16%] sm:ml-[30%] sm:mt-[12%] sm:max-w-[25rem]" />
+            <FeatureCards className="relative ml-[8%] mt-[16%] sm:ml-[30%] sm:mt-[12%] sm:max-w-[28.5rem]" />
           </div>
           <DetailCard className="ml-auto w-[80%] max-w-[17rem] md:mt-4 md:w-full" />
         </div>
@@ -150,22 +116,8 @@ function DeviceMockup() {
 
 const SLIDE_MS = 6500
 
-const arrowClass =
-  'absolute top-[42%] z-10 grid h-11 w-11 -translate-y-1/2 place-items-center bg-ink/30 text-paper opacity-0 backdrop-blur-[2px] transition-opacity duration-200 hover:bg-ink/55 focus-visible:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-70'
-
-/** Panah transparan di kiri-kanan slide: muncul saat di-hover (selalu samar di layar sentuh). */
-function SlideArrows({ onPrev, onNext }) {
-  return (
-    <>
-      <button type="button" onClick={onPrev} aria-label="Slide sebelumnya" className={`${arrowClass} left-0`}>
-        <ChevronLeft className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-      </button>
-      <button type="button" onClick={onNext} aria-label="Slide berikutnya" className={`${arrowClass} right-0`}>
-        <ChevronRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-      </button>
-    </>
-  )
-}
+const navBtn =
+  'grid h-10 w-10 place-items-center border border-ink/30 text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper'
 
 /**
  * Carousel hero: slide 1 (default) = mockup perangkat, slide 2 = headline.
@@ -222,10 +174,9 @@ function HeroCarousel() {
           aria-roledescription="slide"
           aria-label="1 dari 2: tampilan dashboard"
           inert={index !== 0}
-          className={`${slide(0)} group relative max-w-[32rem] self-center`}
+          className={`${slide(0)} max-w-[32rem] self-center`}
         >
           <DeviceMockup />
-          <SlideArrows onPrev={() => go(index - 1)} onNext={() => go(index + 1)} />
         </div>
 
         <div
@@ -233,9 +184,8 @@ function HeroCarousel() {
           aria-roledescription="slide"
           aria-label="2 dari 2: headline"
           inert={index !== 1}
-          className={`${slide(1)} group relative self-center`}
+          className={`${slide(1)} self-center`}
         >
-          <SlideArrows onPrev={() => go(index - 1)} onNext={() => go(index + 1)} />
           <h1
             id="judul-hero"
             className="text-[clamp(2.6rem,6.6vw,5.4rem)] leading-[1.03] tracking-[-0.025em]"
@@ -256,8 +206,11 @@ function HeroCarousel() {
         </div>
       </div>
 
+      {/* Navigasi statis di bawah slide: posisinya tidak berubah saat slide berganti. */}
       <div className="mt-6 flex items-center gap-3">
-        <span className="eyebrow !text-[10px] text-muted">Pilih slide</span>
+        <button type="button" onClick={() => go(index - 1)} aria-label="Slide sebelumnya" className={navBtn}>
+          <ChevronLeft className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+        </button>
         <div className="flex items-center" role="group" aria-label="Pilih slide">
           {[0, 1].map((i) => (
             <button
@@ -277,6 +230,9 @@ function HeroCarousel() {
             </button>
           ))}
         </div>
+        <button type="button" onClick={() => go(index + 1)} aria-label="Slide berikutnya" className={navBtn}>
+          <ChevronRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+        </button>
       </div>
     </div>
   )
